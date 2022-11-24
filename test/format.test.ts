@@ -50,6 +50,16 @@ describe("Format function", () => {
     [
       "123456789",
       {
+        tokenDecimals: 12,
+        significantFigures: 3,
+        minimum: 0.01,
+        omitLeadingZero: true,
+      },
+      "<.01",
+    ],
+    [
+      "123456789",
+      {
         tokenDecimals: 3,
         significantFigures: 6,
         useSymbols: false,

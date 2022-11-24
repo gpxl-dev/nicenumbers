@@ -165,12 +165,18 @@ export const format = (
     }
   }
 
-  console.log(result);
-
   try {
     if (minimum) {
       const _result = parseFloat(result);
-      if (minimum > _result) return `<${minimum}`;
+      let _minStr = minimum.toString();
+      if (omitLeadingZero && minimum < 1) {
+        try {
+          _minStr = "." + minimum.toString().split(".")[1];
+        } catch (e) {
+          // meh, you've provided a weird value (probably negative)
+        }
+      }
+      if (minimum > _result) return `<${_minStr}`;
     }
   } catch (e) {}
   if (useSymbols) {
