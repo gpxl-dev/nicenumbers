@@ -17,7 +17,7 @@ Note that this library doesn't claim to be super efficient or well written, but 
 ### Examples
 
 ```typescript
-import { format } from "nicenumbers";
+import { format } from "@greypixel/nicenumbers";
 
 // If using ethers, this returns a bigNumber
 const tokenAmount = someErc20Contract.balanceOf(user);
@@ -43,7 +43,7 @@ format("12345678000", {
 ### Installation
 
 ```
-yarn add nicenumbers
+yarn add `@greypixel/nicenumbers`
 ```
 
 ## `format`

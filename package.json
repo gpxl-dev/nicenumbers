@@ -1,5 +1,5 @@
 {
-  "name": "nicenumbers",
+  "name": "@greypixel/nicenumbers",
   "version": "0.0.1",
   "description": "Sane bignumber formatting for cryptocurrencies",
   "main": "dist/index.js",
