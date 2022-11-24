@@ -2,6 +2,8 @@
 
 A small utility library to make displaying crpytocurrency token amounts in UIs a bit less painful.
 
+No dependencies.
+
 ### Motivation
 
 Most web3 frontends display ERC20 token amounts. The fact that it's commonplace for ERC20s to have 18 decimals, and also that it's not uncommon for a user to hold billions of one token and tiny fractions of another means UIs have to deal with the possibility of showing numbers across a huge range.
