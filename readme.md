@@ -88,7 +88,7 @@ If set to `true`, commifies output, i.e. `"12345.6789"` becomes `"12,345.6789"`
 
 > Note: Has no effect if useSymbols is true
 
-#### `addCommas` - `number | null` (default: `null`)
+#### `minimum` - `number | null` (default: `null`)
 
 Pass a `number` representing the minimum decimal amount to show. You should supply a decimal number, e.g. `0.01`. When this is set, if the result is lower than the value provided the result will be: `"<0.01"`.
 
