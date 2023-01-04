@@ -3,7 +3,8 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     // If using something like bignumber.js sometimes .toString() returns
     // exponential notation, so try toFixed for safety.
     try {
-        _inputString = input.toFixed(0);
+        if (typeof input === "object")
+            _inputString = input.toFixed(0);
     }
     catch (e) {
         // nm.

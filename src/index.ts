@@ -78,7 +78,7 @@ export const format = (
   // If using something like bignumber.js sometimes .toString() returns
   // exponential notation, so try toFixed for safety.
   try {
-    _inputString = input.toFixed(0);
+    if (typeof input === "object") _inputString = input.toFixed(0);
   } catch (e) {
     // nm.
   }
