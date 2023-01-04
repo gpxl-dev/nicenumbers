@@ -58,6 +58,26 @@ describe("Format function", () => {
       "<.01",
     ],
     [
+      "0",
+      {
+        tokenDecimals: 12,
+        significantFigures: 3,
+        minimum: 0.01,
+        omitLeadingZero: true,
+      },
+      ".000",
+    ],
+    [
+      "0",
+      {
+        tokenDecimals: 12,
+        significantFigures: 3,
+        minimum: 0.01,
+        omitLeadingZero: false,
+      },
+      "0.000",
+    ],
+    [
       "123456789",
       {
         tokenDecimals: 3,

@@ -100,6 +100,8 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     try {
         if (minimum) {
             const _result = parseFloat(result);
+            if (_result === 0)
+                return result.slice(0, omitLeadingZero ? significantFigures + 1 : significantFigures + 2);
             let _minStr = minimum.toString();
             if (omitLeadingZero && minimum < 1) {
                 try {

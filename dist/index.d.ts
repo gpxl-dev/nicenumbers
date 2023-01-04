@@ -49,7 +49,8 @@ export type NiceNumberOptions = {
     /**
      * Number representing the minimum decimal amount to show. You should supply
      * a decimal number, e.g. `0.01`. When this is set, if the result is lower
-     * than the value provided the result will be: `<${minimum}`.
+     * than the value provided the result will be: `<${minimum}` **unless** the
+     * value passed is zero - in this case zero will be shown explicitly.
      *
      * Passing null means there's no minimum amount shown. Note in this case,
      * you can get some very long strings despite a low number of significant
