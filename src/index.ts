@@ -135,6 +135,7 @@ export const format = (
           outArray.push("0");
           for (let j = outArray.length - 2; j >= 0; j--) {
             const char = outArray[j];
+            if (char === ".") continue;
             if (char === "9") {
               outArray[j] = "0";
             } else {

@@ -139,6 +139,17 @@ describe("Format function", () => {
         },
         "12,346",
       ],
+      [
+        15.997758317180917,
+        {
+          minimum: 0.01,
+          tokenDecimals: 0,
+          significantFigures: 3,
+          addCommas: true,
+          useSymbols: false,
+        },
+        "16.0",
+      ],
     ];
 
   test.each(testTable)(
