@@ -1,4 +1,4 @@
-export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, significantFigures = 4, omitTrailingZeroes = false, useSymbols = true, addCommas = false, minimum = null, } = {}) => {
+export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, significantFigures = 4, omitTrailingZeroes = false, useSymbols = true, addCommas = false, minimum = null, minDecimalPlaces = 0, } = {}) => {
     let _inputString = typeof input === "string" ? input : input.toString();
     // If using something like bignumber.js sometimes .toString() returns
     // exponential notation, so try toFixed for safety.
@@ -21,6 +21,8 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     }
     // This is our significant figure counter.
     let sigFigs = 0;
+    let decimalPlaces = 0;
+    let haveSeenDecimalPoint = false;
     const outArray = [];
     const indexOfDecimal = inputArray.indexOf(".");
     const _sigFigs = useSymbols
@@ -28,12 +30,17 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
         : Math.max(indexOfDecimal, significantFigures);
     for (let i = 0; i < inputArray.length; i++) {
         const char = inputArray[i];
-        if (sigFigs < _sigFigs) {
+        if (sigFigs < _sigFigs || decimalPlaces < minDecimalPlaces) {
             // Always ignore decimals, and ignore 0s if we still haven't found our
             // first sig fig.
             if (char !== "." && (sigFigs > 0 || char !== "0")) {
                 sigFigs++;
+                if (haveSeenDecimalPoint)
+                    decimalPlaces++;
             }
+            // record if we've seen the dp.
+            if (char === ".")
+                haveSeenDecimalPoint = true;
             let shouldRoundUp = false;
             // Round up check.
             if (sigFigs === _sigFigs) {
@@ -90,6 +97,15 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     // Add leading zero if necessary
     if (outArray[0] === "." && !omitLeadingZero)
         outArray.unshift("0");
+    // Add trailing zeros where necessary
+    if (decimalPlaces < minDecimalPlaces) {
+        const zerosNeeded = minDecimalPlaces - decimalPlaces;
+        if (!haveSeenDecimalPoint && outArray[outArray.length - 1] !== ".")
+            outArray.push(".");
+        for (let i = 0; i < zerosNeeded; i++) {
+            outArray.push("0");
+        }
+    }
     let result = outArray.join("");
     // If we have a decimal, we may need to add some trailing zeroes if there
     // aren't enough significant figures.

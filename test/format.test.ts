@@ -130,6 +130,28 @@ describe("Format function", () => {
         "1.7",
       ],
       [
+        "17",
+        {
+          tokenDecimals: 1,
+          significantFigures: 5,
+          omitTrailingZeroes: true,
+          minDecimalPlaces: 2,
+        },
+        "1.70",
+      ],
+      [
+        "16234.0123",
+        {
+          tokenDecimals: 1,
+          significantFigures: 2,
+          omitTrailingZeroes: true,
+          minDecimalPlaces: 2,
+          useSymbols: false,
+          addCommas: true,
+        },
+        "16,234.01",
+      ],
+      [
         "12345678000",
         {
           tokenDecimals: 6,

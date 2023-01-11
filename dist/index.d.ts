@@ -24,7 +24,11 @@ export type NiceNumberOptions = {
      * Omits trailing zeroes if the number of significant figures is more than
      * the sig figs that exist, e.g. 1.23000 -> 1.23
      *
-     * > Note: If you set `useSymbols` to false, this will show the full
+     * > Note: If you set `useSymbols` to false, this will show the full number
+     * of significant figures up to the decimal point.
+     *
+     * > Note: Will be overridden by `minDecimalPlaces` when `minDecimalPlaces`
+     * would result in a higer number of significant figures.
      *
      * **Default: `false`**
      */
@@ -59,5 +63,13 @@ export type NiceNumberOptions = {
      * **Default: `null`**
      */
     minimum?: number | null;
+    /**
+     * The minimum number of decimal places to show. Does not work with
+     * `useSymbols`, and will override `significantFigures` when that would
+     * result in fewer decimals.
+     *
+     * > Note: Will prevent `useSymbols` from working.
+     */
+    minDecimalPlaces?: number;
 };
-export declare const format: (input: any, { omitLeadingZero, tokenDecimals, significantFigures, omitTrailingZeroes, useSymbols, addCommas, minimum, }?: NiceNumberOptions) => string;
+export declare const format: (input: any, { omitLeadingZero, tokenDecimals, significantFigures, omitTrailingZeroes, useSymbols, addCommas, minimum, minDecimalPlaces, }?: NiceNumberOptions) => string;

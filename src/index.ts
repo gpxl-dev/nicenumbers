@@ -24,7 +24,11 @@ export type NiceNumberOptions = {
    * Omits trailing zeroes if the number of significant figures is more than
    * the sig figs that exist, e.g. 1.23000 -> 1.23
    *
-   * > Note: If you set `useSymbols` to false, this will show the full
+   * > Note: If you set `useSymbols` to false, this will show the full number
+   * of significant figures up to the decimal point.
+   *
+   * > Note: Will be overridden by `minDecimalPlaces` when `minDecimalPlaces`
+   * would result in a higer number of significant figures.
    *
    * **Default: `false`**
    */
@@ -59,6 +63,14 @@ export type NiceNumberOptions = {
    * **Default: `null`**
    */
   minimum?: number | null;
+  /**
+   * The minimum number of decimal places to show. Does not work with
+   * `useSymbols`, and will override `significantFigures` when that would
+   * result in fewer decimals.
+   *
+   * > Note: Will prevent `useSymbols` from working.
+   */
+  minDecimalPlaces?: number;
 };
 
 export const format = (
@@ -71,6 +83,7 @@ export const format = (
     useSymbols = true,
     addCommas = false,
     minimum = null,
+    minDecimalPlaces = 0,
   }: NiceNumberOptions = {}
 ) => {
   let _inputString = typeof input === "string" ? input : input.toString();
@@ -94,6 +107,8 @@ export const format = (
 
   // This is our significant figure counter.
   let sigFigs = 0;
+  let decimalPlaces = 0;
+  let haveSeenDecimalPoint = false;
 
   const outArray: string[] = [];
   const indexOfDecimal = inputArray.indexOf(".");
@@ -103,12 +118,17 @@ export const format = (
 
   for (let i = 0; i < inputArray.length; i++) {
     const char = inputArray[i];
-    if (sigFigs < _sigFigs) {
+    if (sigFigs < _sigFigs || decimalPlaces < minDecimalPlaces) {
       // Always ignore decimals, and ignore 0s if we still haven't found our
       // first sig fig.
       if (char !== "." && (sigFigs > 0 || char !== "0")) {
         sigFigs++;
+        if (haveSeenDecimalPoint) decimalPlaces++;
       }
+
+      // record if we've seen the dp.
+      if (char === ".") haveSeenDecimalPoint = true;
+
       let shouldRoundUp = false;
 
       // Round up check.
@@ -156,6 +176,17 @@ export const format = (
   }
   // Add leading zero if necessary
   if (outArray[0] === "." && !omitLeadingZero) outArray.unshift("0");
+
+  // Add trailing zeros where necessary
+  if (decimalPlaces < minDecimalPlaces) {
+    const zerosNeeded = minDecimalPlaces - decimalPlaces;
+    if (!haveSeenDecimalPoint && outArray[outArray.length - 1] !== ".")
+      outArray.push(".");
+    for (let i = 0; i < zerosNeeded; i++) {
+      outArray.push("0");
+    }
+  }
+
   let result = outArray.join("");
 
   // If we have a decimal, we may need to add some trailing zeroes if there
