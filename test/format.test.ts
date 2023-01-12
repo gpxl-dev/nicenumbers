@@ -192,6 +192,16 @@ describe("Format function", () => {
         ".097",
       ],
       [
+        -97292739,
+        {
+          significantFigures: 3,
+          tokenDecimals: 9,
+          maxDecimalPlaces: 3,
+          omitLeadingZero: true,
+        },
+        "-.097",
+      ],
+      [
         3341032671,
         {
           tokenDecimals: 9,

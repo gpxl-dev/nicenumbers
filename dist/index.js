@@ -9,6 +9,9 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     catch (e) {
         // nm.
     }
+    const isNegative = _inputString.startsWith("-");
+    if (isNegative)
+        _inputString = _inputString.substring(1);
     // Split into an array of digits.
     const inputArray = _inputString.padStart(tokenDecimals, "0").split("");
     // Splice in the decimal point
@@ -123,8 +126,12 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     try {
         if (minimum) {
             const _result = parseFloat(result);
-            if (_result === 0)
-                return result.slice(0, omitLeadingZero ? significantFigures + 1 : significantFigures + 2);
+            if (_result === 0) {
+                result = result.slice(0, omitLeadingZero ? significantFigures + 1 : significantFigures + 2);
+                if (isNegative)
+                    result = `-${result}`;
+                return result;
+            }
             let _minStr = minimum.toString();
             if (omitLeadingZero && minimum < 1) {
                 try {
@@ -139,6 +146,8 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
         }
     }
     catch (e) { }
+    if (isNegative)
+        result = `-${result}`;
     if (useSymbols) {
         return toSymbolNotation(result);
     }
