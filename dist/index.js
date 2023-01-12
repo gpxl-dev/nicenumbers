@@ -1,4 +1,4 @@
-export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, significantFigures = 4, omitTrailingZeroes = false, useSymbols = true, addCommas = false, minimum = null, minDecimalPlaces = 0, } = {}) => {
+export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, significantFigures = 4, omitTrailingZeroes = false, useSymbols = true, addCommas = false, minimum = null, minDecimalPlaces = 0, maxDecimalPlaces = Infinity, } = {}) => {
     let _inputString = typeof input === "string" ? input : input.toString();
     // If using something like bignumber.js sometimes .toString() returns
     // exponential notation, so try toFixed for safety.
@@ -30,13 +30,15 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
         : Math.max(indexOfDecimal, significantFigures);
     for (let i = 0; i < inputArray.length; i++) {
         const char = inputArray[i];
-        if (sigFigs < _sigFigs || decimalPlaces < minDecimalPlaces) {
+        if ((sigFigs < _sigFigs && decimalPlaces < maxDecimalPlaces) ||
+            decimalPlaces < minDecimalPlaces) {
             // Always ignore decimals, and ignore 0s if we still haven't found our
             // first sig fig.
-            if (char !== "." && (sigFigs > 0 || char !== "0")) {
-                sigFigs++;
+            if (char !== ".") {
                 if (haveSeenDecimalPoint)
                     decimalPlaces++;
+                if (sigFigs > 0 || char !== "0")
+                    sigFigs++;
             }
             // record if we've seen the dp.
             if (char === ".")
@@ -107,6 +109,8 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
         }
     }
     let result = outArray.join("");
+    if (omitLeadingZero && result.startsWith("0."))
+        result = result.substring(1);
     // If we have a decimal, we may need to add some trailing zeroes if there
     // aren't enough significant figures.
     if (!omitTrailingZeroes && result.indexOf(".") !== -1) {

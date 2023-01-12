@@ -71,5 +71,10 @@ export type NiceNumberOptions = {
      * > Note: Will prevent `useSymbols` from working.
      */
     minDecimalPlaces?: number;
+    /**
+     * The maximum number of decimal places to show. Will override
+     * `significantFigures` when that would result in more decimals.
+     */
+    maxDecimalPlaces?: number;
 };
-export declare const format: (input: any, { omitLeadingZero, tokenDecimals, significantFigures, omitTrailingZeroes, useSymbols, addCommas, minimum, minDecimalPlaces, }?: NiceNumberOptions) => string;
+export declare const format: (input: any, { omitLeadingZero, tokenDecimals, significantFigures, omitTrailingZeroes, useSymbols, addCommas, minimum, minDecimalPlaces, maxDecimalPlaces, }?: NiceNumberOptions) => string;
