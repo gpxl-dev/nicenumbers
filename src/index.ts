@@ -203,7 +203,10 @@ export const format = (
   // If we have a decimal, we may need to add some trailing zeroes if there
   // aren't enough significant figures.
   if (!omitTrailingZeroes && result.indexOf(".") !== -1) {
-    const trailingZeroesNeeded = _sigFigs - (result.length - 1);
+    const trailingZeroesNeeded = Math.min(
+      maxDecimalPlaces - decimalPlaces,
+      _sigFigs - (result.length - 1)
+    );
     if (trailingZeroesNeeded > 0) {
       for (let j = 0; j < trailingZeroesNeeded; j++) result += "0";
     }

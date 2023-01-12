@@ -191,6 +191,15 @@ describe("Format function", () => {
         },
         ".097",
       ],
+      [
+        3341032671,
+        {
+          tokenDecimals: 9,
+          minDecimalPlaces: 2,
+          maxDecimalPlaces: 2,
+        },
+        "3.34",
+      ],
     ];
 
   test.each(testTable)(
