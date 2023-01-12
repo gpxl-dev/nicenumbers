@@ -172,6 +172,25 @@ describe("Format function", () => {
         },
         "16.0",
       ],
+      [
+        0.31006111129761954,
+        {
+          tokenDecimals: 0,
+          significantFigures: 3,
+          omitLeadingZero: true,
+        },
+        ".310",
+      ],
+      [
+        97292739,
+        {
+          significantFigures: 3,
+          tokenDecimals: 9,
+          maxDecimalPlaces: 3,
+          omitLeadingZero: true,
+        },
+        ".097",
+      ],
     ];
 
   test.each(testTable)(

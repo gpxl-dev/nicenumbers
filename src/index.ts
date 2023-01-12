@@ -71,6 +71,11 @@ export type NiceNumberOptions = {
    * > Note: Will prevent `useSymbols` from working.
    */
   minDecimalPlaces?: number;
+  /**
+   * The maximum number of decimal places to show. Will override
+   * `significantFigures` when that would result in more decimals.
+   */
+  maxDecimalPlaces?: number;
 };
 
 export const format = (
@@ -84,6 +89,7 @@ export const format = (
     addCommas = false,
     minimum = null,
     minDecimalPlaces = 0,
+    maxDecimalPlaces = Infinity,
   }: NiceNumberOptions = {}
 ) => {
   let _inputString = typeof input === "string" ? input : input.toString();
@@ -118,12 +124,15 @@ export const format = (
 
   for (let i = 0; i < inputArray.length; i++) {
     const char = inputArray[i];
-    if (sigFigs < _sigFigs || decimalPlaces < minDecimalPlaces) {
+    if (
+      (sigFigs < _sigFigs && decimalPlaces < maxDecimalPlaces) ||
+      decimalPlaces < minDecimalPlaces
+    ) {
       // Always ignore decimals, and ignore 0s if we still haven't found our
       // first sig fig.
-      if (char !== "." && (sigFigs > 0 || char !== "0")) {
-        sigFigs++;
+      if (char !== ".") {
         if (haveSeenDecimalPoint) decimalPlaces++;
+        if (sigFigs > 0 || char !== "0") sigFigs++;
       }
 
       // record if we've seen the dp.
@@ -188,6 +197,8 @@ export const format = (
   }
 
   let result = outArray.join("");
+
+  if (omitLeadingZero && result.startsWith("0.")) result = result.substring(1);
 
   // If we have a decimal, we may need to add some trailing zeroes if there
   // aren't enough significant figures.
