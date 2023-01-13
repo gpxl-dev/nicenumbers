@@ -92,6 +92,7 @@ export const format = (
     maxDecimalPlaces = Infinity,
   }: NiceNumberOptions = {}
 ) => {
+  if (input === undefined) return "";
   let _inputString = typeof input === "string" ? input : input.toString();
 
   // If using something like bignumber.js sometimes .toString() returns

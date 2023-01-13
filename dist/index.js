@@ -1,4 +1,6 @@
 export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, significantFigures = 4, omitTrailingZeroes = false, useSymbols = true, addCommas = false, minimum = null, minDecimalPlaces = 0, maxDecimalPlaces = Infinity, } = {}) => {
+    if (input === undefined)
+        return "";
     let _inputString = typeof input === "string" ? input : input.toString();
     // If using something like bignumber.js sometimes .toString() returns
     // exponential notation, so try toFixed for safety.
