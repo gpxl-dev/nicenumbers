@@ -76,5 +76,9 @@ export type NiceNumberOptions = {
      * `significantFigures` when that would result in more decimals.
      */
     maxDecimalPlaces?: number;
+    /**
+     * String to return if input equals zero
+     */
+    zeroResult?: string;
 };
-export declare const format: (input: any, { omitLeadingZero, tokenDecimals, significantFigures, omitTrailingZeroes, useSymbols, addCommas, minimum, minDecimalPlaces, maxDecimalPlaces, }?: NiceNumberOptions) => string;
+export declare const format: (input: any, { omitLeadingZero, tokenDecimals, significantFigures, omitTrailingZeroes, useSymbols, addCommas, minimum, minDecimalPlaces, maxDecimalPlaces, zeroResult, }?: NiceNumberOptions) => string;

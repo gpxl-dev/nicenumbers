@@ -1,6 +1,6 @@
 {
   "name": "@greypixel_/nicenumbers",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Sane bignumber formatting for cryptocurrencies",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

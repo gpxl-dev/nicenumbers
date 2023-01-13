@@ -1,4 +1,4 @@
-export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, significantFigures = 4, omitTrailingZeroes = false, useSymbols = true, addCommas = false, minimum = null, minDecimalPlaces = 0, maxDecimalPlaces = Infinity, } = {}) => {
+export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, significantFigures = 4, omitTrailingZeroes = false, useSymbols = true, addCommas = false, minimum = null, minDecimalPlaces = 0, maxDecimalPlaces = Infinity, zeroResult, } = {}) => {
     if (input === undefined)
         return "";
     let _inputString = typeof input === "string" ? input : input.toString();
@@ -10,6 +10,21 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     }
     catch (e) {
         // nm.
+    }
+    try {
+        const value = parseFloat(_inputString);
+        if (value === 0) {
+            if (zeroResult)
+                return zeroResult;
+            if (!minDecimalPlaces)
+                return "0";
+            return `${omitLeadingZero ? "." : "0."}${new Array(minDecimalPlaces)
+                .fill("0")
+                .join("")}`;
+        }
+    }
+    catch (e) {
+        // not zero, so don't care.
     }
     const isNegative = _inputString.startsWith("-");
     if (isNegative)

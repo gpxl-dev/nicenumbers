@@ -69,17 +69,7 @@ describe("Format function", () => {
         minimum: 0.01,
         omitLeadingZero: true,
       },
-      ".000",
-    ],
-    [
       "0",
-      {
-        tokenDecimals: 12,
-        significantFigures: 3,
-        minimum: 0.01,
-        omitLeadingZero: false,
-      },
-      "0.000",
     ],
     [
       0.000020680147102110222,
@@ -217,6 +207,15 @@ describe("Format function", () => {
         maxDecimalPlaces: 2,
       },
       "",
+    ],
+    [
+      "0",
+      {
+        addCommas: true,
+        omitLeadingZero: true,
+        minDecimalPlaces: 3,
+      },
+      ".000",
     ],
   ];
 

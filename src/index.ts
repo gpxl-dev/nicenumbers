@@ -76,6 +76,10 @@ export type NiceNumberOptions = {
    * `significantFigures` when that would result in more decimals.
    */
   maxDecimalPlaces?: number;
+  /**
+   * String to return if input equals zero
+   */
+  zeroResult?: string;
 };
 
 export const format = (
@@ -90,6 +94,7 @@ export const format = (
     minimum = null,
     minDecimalPlaces = 0,
     maxDecimalPlaces = Infinity,
+    zeroResult,
   }: NiceNumberOptions = {}
 ) => {
   if (input === undefined) return "";
@@ -101,6 +106,19 @@ export const format = (
     if (typeof input === "object") _inputString = input.toFixed(0);
   } catch (e) {
     // nm.
+  }
+
+  try {
+    const value = parseFloat(_inputString);
+    if (value === 0) {
+      if (zeroResult) return zeroResult;
+      if (!minDecimalPlaces) return "0";
+      return `${omitLeadingZero ? "." : "0."}${new Array(minDecimalPlaces)
+        .fill("0")
+        .join("")}`;
+    }
+  } catch (e) {
+    // not zero, so don't care.
   }
   const isNegative = _inputString.startsWith("-");
   if (isNegative) _inputString = _inputString.substring(1);
