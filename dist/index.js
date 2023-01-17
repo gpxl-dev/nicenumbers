@@ -182,7 +182,7 @@ const symbols = [
 ];
 const addCommasToString = (input) => {
     const indexOfDecimal = input.indexOf(".");
-    if (indexOfDecimal !== -1 && indexOfDecimal < 5)
+    if (indexOfDecimal !== -1 && indexOfDecimal < 4)
         return input;
     if (indexOfDecimal == -1 && input.length < 4)
         return input;

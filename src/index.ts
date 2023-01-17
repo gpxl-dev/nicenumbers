@@ -273,7 +273,7 @@ const symbols = [
 
 const addCommasToString = (input: string) => {
   const indexOfDecimal = input.indexOf(".");
-  if (indexOfDecimal !== -1 && indexOfDecimal < 5) return input;
+  if (indexOfDecimal !== -1 && indexOfDecimal < 4) return input;
   if (indexOfDecimal == -1 && input.length < 4) return input;
   const [beforeDecimal, afterDecimal] = input.split(".");
   const beforeDecimalArray = beforeDecimal.split("");
