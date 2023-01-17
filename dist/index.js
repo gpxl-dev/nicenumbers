@@ -35,7 +35,7 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     if (tokenDecimals !== 0) {
         inputArray.splice(tokenDecimals * -1, 0, ".");
     }
-    else {
+    else if (inputArray.indexOf(".") === -1) {
         // Subsequent code expects a decimal point.
         inputArray.push(".");
     }
@@ -134,7 +134,7 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     // If we have a decimal, we may need to add some trailing zeroes if there
     // aren't enough significant figures.
     if (!omitTrailingZeroes && result.indexOf(".") !== -1) {
-        const trailingZeroesNeeded = Math.min(maxDecimalPlaces - decimalPlaces, _sigFigs - (result.length - 1));
+        const trailingZeroesNeeded = Math.min(maxDecimalPlaces - decimalPlaces, _sigFigs - sigFigs);
         if (trailingZeroesNeeded > 0) {
             for (let j = 0; j < trailingZeroesNeeded; j++)
                 result += "0";

@@ -239,6 +239,14 @@ describe("Format function", () => {
       },
       "6,624.77",
     ],
+    [
+      0.11,
+      {
+        tokenDecimals: 0,
+        significantFigures: 4,
+      },
+      "0.1100",
+    ],
   ];
 
   test.each(testTable)(

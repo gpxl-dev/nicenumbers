@@ -127,7 +127,7 @@ export const format = (
   // Splice in the decimal point
   if (tokenDecimals !== 0) {
     inputArray.splice(tokenDecimals * -1, 0, ".");
-  } else {
+  } else if (inputArray.indexOf(".") === -1) {
     // Subsequent code expects a decimal point.
     inputArray.push(".");
   }
@@ -226,7 +226,7 @@ export const format = (
   if (!omitTrailingZeroes && result.indexOf(".") !== -1) {
     const trailingZeroesNeeded = Math.min(
       maxDecimalPlaces - decimalPlaces,
-      _sigFigs - (result.length - 1)
+      _sigFigs - sigFigs
     );
     if (trailingZeroesNeeded > 0) {
       for (let j = 0; j < trailingZeroesNeeded; j++) result += "0";
