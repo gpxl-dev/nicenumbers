@@ -226,7 +226,18 @@ describe("Format function", () => {
         minDecimalPlaces: 2,
         useSymbols: false,
       },
-      "6,591.27",
+      "6,591.28",
+    ],
+    [
+      6624.765676259999,
+      {
+        tokenDecimals: 0,
+        addCommas: true,
+        maxDecimalPlaces: 2,
+        minDecimalPlaces: 2,
+        useSymbols: false,
+      },
+      "6,624.77",
     ],
   ];
 

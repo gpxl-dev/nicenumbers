@@ -65,7 +65,7 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
                 haveSeenDecimalPoint = true;
             let shouldRoundUp = false;
             // Round up check.
-            if (sigFigs === _sigFigs) {
+            if (sigFigs >= _sigFigs && decimalPlaces >= minDecimalPlaces) {
                 for (let r = i + 1; r < inputArray.length; r++) {
                     const char = inputArray[r];
                     if (char === "." || char === "5")

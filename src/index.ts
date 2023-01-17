@@ -162,7 +162,7 @@ export const format = (
       let shouldRoundUp = false;
 
       // Round up check.
-      if (sigFigs === _sigFigs) {
+      if (sigFigs >= _sigFigs && decimalPlaces >= minDecimalPlaces) {
         for (let r = i + 1; r < inputArray.length; r++) {
           const char = inputArray[r];
           if (char === "." || char === "5") continue;
@@ -232,7 +232,6 @@ export const format = (
       for (let j = 0; j < trailingZeroesNeeded; j++) result += "0";
     }
   }
-
   try {
     if (minimum) {
       const _result = parseFloat(result);
