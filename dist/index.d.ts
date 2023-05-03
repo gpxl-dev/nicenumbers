@@ -21,6 +21,10 @@ export type NiceNumberOptions = {
      */
     significantFigures?: number;
     /**
+     * A minimum number of significant figures to show.
+     */
+    minSignificantFigures?: number;
+    /**
      * Omits trailing zeroes if the number of significant figures is more than
      * the sig figs that exist, e.g. 1.23000 -> 1.23
      *
@@ -35,7 +39,9 @@ export type NiceNumberOptions = {
     omitTrailingZeroes?: boolean;
     /**
      * Uses symbols for large numbers, e.g. 12345 -> 12.345k. Best used
-     * with smaller numbers of significant figures.
+     * with smaller numbers of significant figures. If `useSymbols` is off, the
+     * more significant figures than specified may be shown, as we will show
+     * numbers up to the decimal point.
      *
      * > Note: `addCommas` has no effect if using symbols.
      *

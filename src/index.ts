@@ -21,6 +21,10 @@ export type NiceNumberOptions = {
    */
   significantFigures?: number;
   /**
+   * A minimum number of significant figures to show.
+   */
+  minSignificantFigures?: number;
+  /**
    * Omits trailing zeroes if the number of significant figures is more than
    * the sig figs that exist, e.g. 1.23000 -> 1.23
    *
@@ -35,7 +39,9 @@ export type NiceNumberOptions = {
   omitTrailingZeroes?: boolean;
   /**
    * Uses symbols for large numbers, e.g. 12345 -> 12.345k. Best used
-   * with smaller numbers of significant figures.
+   * with smaller numbers of significant figures. If `useSymbols` is off, the
+   * more significant figures than specified may be shown, as we will show
+   * numbers up to the decimal point.
    *
    * > Note: `addCommas` has no effect if using symbols.
    *
@@ -183,16 +189,24 @@ export const format = (
           outArray.push((parseInt(char) + 1).toString());
         } else {
           outArray.push("0");
+          let haveSeenDp = false;
           for (let j = outArray.length - 2; j >= 0; j--) {
             const char = outArray[j];
-            if (char === ".") continue;
-            if (char === "9") {
+            if (char === ".") {
+              haveSeenDp = true;
+            } else if (char === "9") {
               outArray[j] = "0";
             } else {
               outArray[j] = (parseInt(outArray[j]) + 1).toString();
               break;
             }
-            if (j === 0) outArray.unshift("1");
+            if (j === 0) {
+              outArray.unshift("1");
+              if (haveSeenDecimalPoint) {
+                // remove the last element of outarray
+                outArray.pop();
+              }
+            }
           }
         }
       }
@@ -255,7 +269,7 @@ export const format = (
     }
   } catch (e) {}
   if (isNegative) result = `-${result}`;
-  if (useSymbols) {
+  if (useSymbols && !minDecimalPlaces) {
     return toSymbolNotation(result);
   } else if (addCommas) {
     return addCommasToString(result);

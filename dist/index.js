@@ -90,19 +90,26 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
                 }
                 else {
                     outArray.push("0");
+                    let haveSeenDp = false;
                     for (let j = outArray.length - 2; j >= 0; j--) {
                         const char = outArray[j];
-                        if (char === ".")
-                            continue;
-                        if (char === "9") {
+                        if (char === ".") {
+                            haveSeenDp = true;
+                        }
+                        else if (char === "9") {
                             outArray[j] = "0";
                         }
                         else {
                             outArray[j] = (parseInt(outArray[j]) + 1).toString();
                             break;
                         }
-                        if (j === 0)
+                        if (j === 0) {
                             outArray.unshift("1");
+                            if (haveSeenDecimalPoint) {
+                                // remove the last element of outarray
+                                outArray.pop();
+                            }
+                        }
                     }
                 }
             }
@@ -165,7 +172,7 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
     catch (e) { }
     if (isNegative)
         result = `-${result}`;
-    if (useSymbols) {
+    if (useSymbols && !minDecimalPlaces) {
         return toSymbolNotation(result);
     }
     else if (addCommas) {
