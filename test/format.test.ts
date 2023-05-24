@@ -265,6 +265,14 @@ describe("Format function", () => {
       },
       "1.00",
     ],
+    [
+      10_000_000,
+      {
+        significantFigures: 1,
+        tokenDecimals: 0,
+      },
+      "10M",
+    ],
   ];
 
   test.each(testTable)(

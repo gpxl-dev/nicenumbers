@@ -189,11 +189,10 @@ export const format = (
           outArray.push((parseInt(char) + 1).toString());
         } else {
           outArray.push("0");
-          let haveSeenDp = false;
           for (let j = outArray.length - 2; j >= 0; j--) {
             const char = outArray[j];
             if (char === ".") {
-              haveSeenDp = true;
+              // ignore
             } else if (char === "9") {
               outArray[j] = "0";
             } else {
@@ -311,14 +310,15 @@ const toSymbolNotation = (input: string) => {
     if (input.length <= n) continue;
     const inputArray = input.split("");
     inputArray.splice(n * -1, 0, ".");
-    let onlyZerosSoFar = true;
+    let onlyInsignificanceSoFar = true;
     const outArray = [];
     for (let j = inputArray.length - 1; j >= 0; j--) {
       const char = inputArray[j];
-      if (onlyZerosSoFar && (char === "0" || char === ".")) {
+      if (onlyInsignificanceSoFar && (char === "0" || char === ".")) {
+        if (char === ".") onlyInsignificanceSoFar = false;
         continue;
       }
-      onlyZerosSoFar = false;
+      onlyInsignificanceSoFar = false;
       outArray.unshift(char);
     }
     outArray.push(symbol);
