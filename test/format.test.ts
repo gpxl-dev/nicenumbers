@@ -273,6 +273,33 @@ describe("Format function", () => {
       },
       "10M",
     ],
+    [
+      2e19,
+      {
+        significantFigures: 4,
+        addCommas: true,
+        tokenDecimals: 0,
+      },
+      "∞",
+    ],
+    [
+      10_000_000,
+      {
+        currencyPrefix: "$",
+        significantFigures: 1,
+        tokenDecimals: 0,
+      },
+      "$10M",
+    ],
+    [
+      -10_000_000,
+      {
+        currencyPrefix: "$",
+        significantFigures: 1,
+        tokenDecimals: 0,
+      },
+      "-$10M",
+    ],
   ];
 
   test.each(testTable)(

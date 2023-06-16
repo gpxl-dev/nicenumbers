@@ -1,7 +1,9 @@
-export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, significantFigures = 4, omitTrailingZeroes = false, useSymbols = true, addCommas = false, minimum = null, minDecimalPlaces = 0, maxDecimalPlaces = Infinity, zeroResult, } = {}) => {
+export const format = (input, { currencyPrefix = "", omitLeadingZero = false, tokenDecimals = 18, significantFigures = 4, omitTrailingZeroes = false, useSymbols = true, addCommas = false, minimum = null, minDecimalPlaces = 0, maxDecimalPlaces = Infinity, zeroResult, } = {}) => {
     if (input === undefined)
         return "";
     let _inputString = typeof input === "string" ? input : input.toString();
+    if (typeof input === "number" && input > 1e17)
+        return "∞";
     // If using something like bignumber.js sometimes .toString() returns
     // exponential notation, so try toFixed for safety.
     try {
@@ -17,10 +19,10 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
             if (zeroResult)
                 return zeroResult;
             if (!minDecimalPlaces)
-                return "0";
-            return `${omitLeadingZero ? "." : "0."}${new Array(minDecimalPlaces)
+                return currencyPrefix + "0";
+            return addCurrencySymbol(`${omitLeadingZero ? "." : "0."}${new Array(minDecimalPlaces)
                 .fill("0")
-                .join("")}`;
+                .join("")}`, currencyPrefix);
         }
     }
     catch (e) {
@@ -152,8 +154,8 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
             if (_result === 0) {
                 result = result.slice(0, omitLeadingZero ? significantFigures + 1 : significantFigures + 2);
                 if (isNegative)
-                    result = `-${result}`;
-                return result;
+                    result = `-${currencyPrefix}${result}`;
+                return addCurrencySymbol(result, currencyPrefix);
             }
             let _minStr = minimum.toString();
             if (omitLeadingZero && minimum < 1) {
@@ -165,27 +167,36 @@ export const format = (input, { omitLeadingZero = false, tokenDecimals = 18, sig
                 }
             }
             if (minimum > _result)
-                return `<${_minStr}`;
+                return addCurrencySymbol(`<${_minStr}`, currencyPrefix);
         }
     }
     catch (e) { }
     if (isNegative)
         result = `-${result}`;
     if (useSymbols && !minDecimalPlaces) {
-        return toSymbolNotation(result);
+        return addCurrencySymbol(toSymbolNotation(result), currencyPrefix);
     }
     else if (addCommas) {
-        return addCommasToString(result);
+        return addCurrencySymbol(addCommasToString(result), currencyPrefix);
     }
     else {
-        return result;
+        return addCurrencySymbol(result, currencyPrefix);
     }
 };
 const symbols = [
+    { n: 12, symbol: "T" },
     { n: 9, symbol: "B" },
     { n: 6, symbol: "M" },
     { n: 3, symbol: "k" },
 ];
+const addCurrencySymbol = (input, currencyPrefix) => {
+    if (!currencyPrefix.length)
+        return input;
+    if (input.startsWith("-"))
+        return input.split("-").join(`-${currencyPrefix}`);
+    else
+        return currencyPrefix + input;
+};
 const addCommasToString = (input) => {
     const indexOfDecimal = input.indexOf(".");
     if (indexOfDecimal !== -1 && indexOfDecimal < 4)

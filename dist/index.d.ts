@@ -1,5 +1,11 @@
 export type NiceNumberOptions = {
     /**
+     * A prefix to use for the currency, e.g. `£` or `$`, this is particularly
+     * useful when numbers are potentially negative, because the currency symbol
+     * should go between the - and the number.
+     */
+    currencyPrefix?: string;
+    /**
      * If set to true, will omit the leading zero for numbers less than 0,
      * e.g. `0.1` -> `.1`.
      *
@@ -87,4 +93,4 @@ export type NiceNumberOptions = {
      */
     zeroResult?: string;
 };
-export declare const format: (input: any, { omitLeadingZero, tokenDecimals, significantFigures, omitTrailingZeroes, useSymbols, addCommas, minimum, minDecimalPlaces, maxDecimalPlaces, zeroResult, }?: NiceNumberOptions) => string;
+export declare const format: (input: any, { currencyPrefix, omitLeadingZero, tokenDecimals, significantFigures, omitTrailingZeroes, useSymbols, addCommas, minimum, minDecimalPlaces, maxDecimalPlaces, zeroResult, }?: NiceNumberOptions) => string;

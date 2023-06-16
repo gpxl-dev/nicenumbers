@@ -1,5 +1,11 @@
 export type NiceNumberOptions = {
   /**
+   * A prefix to use for the currency, e.g. `£` or `$`, this is particularly
+   * useful when numbers are potentially negative, because the currency symbol
+   * should go between the - and the number.
+   */
+  currencyPrefix?: string;
+  /**
    * If set to true, will omit the leading zero for numbers less than 0,
    * e.g. `0.1` -> `.1`.
    *
@@ -91,6 +97,7 @@ export type NiceNumberOptions = {
 export const format = (
   input: any,
   {
+    currencyPrefix = "",
     omitLeadingZero = false,
     tokenDecimals = 18,
     significantFigures = 4,
@@ -106,6 +113,8 @@ export const format = (
   if (input === undefined) return "";
   let _inputString = typeof input === "string" ? input : input.toString();
 
+  if (typeof input === "number" && input > 1e17) return "∞";
+
   // If using something like bignumber.js sometimes .toString() returns
   // exponential notation, so try toFixed for safety.
   try {
@@ -118,10 +127,13 @@ export const format = (
     const value = parseFloat(_inputString);
     if (value === 0) {
       if (zeroResult) return zeroResult;
-      if (!minDecimalPlaces) return "0";
-      return `${omitLeadingZero ? "." : "0."}${new Array(minDecimalPlaces)
-        .fill("0")
-        .join("")}`;
+      if (!minDecimalPlaces) return currencyPrefix + "0";
+      return addCurrencySymbol(
+        `${omitLeadingZero ? "." : "0."}${new Array(minDecimalPlaces)
+          .fill("0")
+          .join("")}`,
+        currencyPrefix
+      );
     }
   } catch (e) {
     // not zero, so don't care.
@@ -253,8 +265,8 @@ export const format = (
           0,
           omitLeadingZero ? significantFigures + 1 : significantFigures + 2
         );
-        if (isNegative) result = `-${result}`;
-        return result;
+        if (isNegative) result = `-${currencyPrefix}${result}`;
+        return addCurrencySymbol(result, currencyPrefix);
       }
       let _minStr = minimum.toString();
       if (omitLeadingZero && minimum < 1) {
@@ -264,24 +276,32 @@ export const format = (
           // meh, you've provided a weird value (probably negative)
         }
       }
-      if (minimum > _result) return `<${_minStr}`;
+      if (minimum > _result)
+        return addCurrencySymbol(`<${_minStr}`, currencyPrefix);
     }
   } catch (e) {}
   if (isNegative) result = `-${result}`;
   if (useSymbols && !minDecimalPlaces) {
-    return toSymbolNotation(result);
+    return addCurrencySymbol(toSymbolNotation(result), currencyPrefix);
   } else if (addCommas) {
-    return addCommasToString(result);
+    return addCurrencySymbol(addCommasToString(result), currencyPrefix);
   } else {
-    return result;
+    return addCurrencySymbol(result, currencyPrefix);
   }
 };
 
 const symbols = [
+  { n: 12, symbol: "T" },
   { n: 9, symbol: "B" },
   { n: 6, symbol: "M" },
   { n: 3, symbol: "k" },
 ];
+
+const addCurrencySymbol = (input: string, currencyPrefix: string) => {
+  if (!currencyPrefix.length) return input;
+  if (input.startsWith("-")) return input.split("-").join(`-${currencyPrefix}`);
+  else return currencyPrefix + input;
+};
 
 const addCommasToString = (input: string) => {
   const indexOfDecimal = input.indexOf(".");
